@@ -18,8 +18,6 @@ class Job(db.Model):
     def __repr__(self):
         return '<Job %r>' % self.id
 
-pp = pprint.PrettyPrinter(indent=4)
-
 @app.route('/')
 def index():
     # Lets check if there are any jobs in the database
