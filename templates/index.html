@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{%block head%}
+{%endblock%}
+
+{% block body %}
+
+{% for job in data.organization %}
+    <input class="organizations" type="hidden" name="{{job.organization}}" value="{{job.organization_count}}">
+{% endfor%}
+
+{% for job in data.professions %}
+    <input class="professions" type="hidden" name="{{job.profession}}" value="{{job.profession_count}}">
+{% endfor %}
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<script>
+
+    const organizations = document.getElementsByClassName('organizations')
+    const professions = document.getElementsByClassName('professions')
+
+    const list = []
+    const drilldownList = []
+
+    // Create a list
+    function createList(data, name) {
+        return {
+            name: name,
+            y: data.length,
+            drilldown: name
+        }
+    }
+
+    list.push(createList(organizations, 'organizations'))
+    list.push(createList(professions, 'professions'))
+
+    // Create a drilldown series
+
+    function createDrilldownList(list, name) {
+        const data = []
+        for (const element of list) {
+            data.push([element.name, Number(element.value)])
+        }
+        
+        return {
+            id: name,
+            data
+        }
+    }
+
+    drilldownList.push(createDrilldownList(organizations, 'organizations'))
+    drilldownList.push(createDrilldownList(professions, 'professions'))
+
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Basic drilldown'
+        },
+        xAxis: {
+            type: 'category'
+        },
+
+        legend: {
+            enabled: false
+        },
+
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+
+        series: [{
+            name: 'Organization Breakdown',
+            colorByPoint: true,
+            data: list
+        }],
+        drilldown: {
+            series: drilldownList
+        }
+    });
+</script>
+{% endblock %}
