@@ -1,4 +1,4 @@
-import requests, pandas, pprint, json
+import requests, json
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
